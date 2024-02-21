@@ -18,13 +18,13 @@ io.on("connection", onConnected);
 
 const allUsers = [];
 const socketIdToUserMapping = new Map();
-
+const userToSocketIdMapping = new Map();
 function onConnected(socket) {
     console.log("New connection:", socket.id);
 
     socket.on("new-user-joined", data => {
       allUsers.push(data);
-      console.log(allUsers);
+        allUsers.push(data)
         socketIdToUserMapping.set(socket.id, data);
         io.emit("new-user-joined", allUsers);
     });
@@ -43,10 +43,9 @@ function onConnected(socket) {
                 console.log("User disconnected:", currUser);
                 console.log("Remaining users:", allUsers);
                 if (allUsers.length === 0) {
-                    // If no users are connected, clear the allUsers array
                     allUsers.length = 0;
                 }
-                io.emit("user-disconnected", currUser);
+                io.emit("new-user-joined", allUsers);
             }
         }
     });
