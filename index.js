@@ -35,13 +35,22 @@ function onConnected(socket) {
 
     socket.on("disconnect", () => {
         const currUser = socketIdToUserMapping.get(socket.id);
-        const index = allUsers.indexOf(currUser);
-        if (index !== -1) {
-            allUsers.splice(index, 1);
-            socketIdToUserMapping.delete(socket.id);
-            io.emit("new-user-joined", allUsers);
+        if (currUser) {
+            const index = allUsers.indexOf(currUser);
+            if (index !== -1) {
+                allUsers.splice(index, 1);
+                socketIdToUserMapping.delete(socket.id);
+                console.log("User disconnected:", currUser);
+                console.log("Remaining users:", allUsers);
+                if (allUsers.length === 0) {
+                    // If no users are connected, clear the allUsers array
+                    allUsers.length = 0;
+                }
+                io.emit("user-disconnected", currUser);
+            }
         }
     });
+    
 
     socket.on("groupName", data => {
         io.emit("groupName", data);
