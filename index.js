@@ -23,7 +23,6 @@ function onConnected(socket) {
     console.log("New connection:", socket.id);
 
     socket.on("new-user-joined", data => {
-      allUsers.push(data);
         allUsers.push(data)
         socketIdToUserMapping.set(socket.id, data);
         io.emit("new-user-joined", allUsers);
